@@ -1,10 +1,22 @@
 from decimal import Decimal
+from range_key_dict import RangeKeyDict
 
-sal = 0      #salary
-inc = 0.03   #percentage increase over last year
-tx  = 0.24   #tax percentage could map the values to ranges but eh
-frq = 12     #payment frequency
-ret = 0.06   #percentage to go to your retiremnet fund
+#2023 tax brackets
+taxbracket = RangeKeyDict({
+    (0,11000)            : .10,
+    (11001,44725)        : .12,
+    (44726,95375)        : .22,
+    (95376,182100)       : .24,
+    (182101,231250)      : .32,
+    (231251,578125)      : .35,
+    (578126,99999999999) : .37 
+})
+
+sal = 100000            #salary
+inc = 0.03              #percentage increase over last year
+txr = taxbracket[sal]   #tax percentage
+frq = 12                #payment frequency
+ret = 0.06              #percentage to go to your retiremnet fund
 
 # this function assumes a pre-tax retirement deduction 
 def paycheck_estimate(salary, increase, tax, ret, frequency):
