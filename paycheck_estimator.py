@@ -12,19 +12,20 @@ taxbracket = RangeKeyDict({
     (578126,99999999999) : .37 
 })
 
-sal = 100000            #salary
-inc = 0.03              #percentage increase over last year
+sal = 99999.99          #salary
+inc = 0.00              #percentage increase over last year
 txr = taxbracket[sal]   #tax percentage
 frq = 12                #payment frequency
 ret = 0.06              #percentage to go to your retiremnet fund
+msc = 340               #miscellaneous adjustments (post tax) per paycheck
 
 # this function assumes a pre-tax retirement deduction 
-def paycheck_estimate(salary, increase, tax, ret, frequency):
+def paycheck_estimate(salary, increase, tax, rtr, misc, frequency):
     increase = salary * increase
     salary   = salary + increase
-    retire   = salary * ret
+    retire   = salary * rtr
     taxes    = salary * tax
-    takehome = ((salary - ret) - taxes) / frq
+    takehome = (((salary - ret) - taxes) - (msc * frequency)) / frequency
     
     increase = Decimal(increase).quantize(Decimal('1.00'))
     salary   = Decimal(salary).quantize(Decimal('1.00'))
@@ -42,6 +43,6 @@ def paycheck_estimate(salary, increase, tax, ret, frequency):
     )
     
 #running the gamut of potential increases to the tenth of a percentage point 
-while (inc < 0.07):
-    paycheck_estimate(sal, inc, tx, ret, frq)
+while (inc < 0.051):
+    paycheck_estimate(sal, inc, txr, ret, msc, frq)
     inc += .001
